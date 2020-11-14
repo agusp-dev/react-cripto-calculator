@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { useCoin } from '../hooks'
+import { useCoin, useCrypto } from '../hooks'
 
 const Button = styled.input`
   margin-top: 20px;
@@ -27,12 +27,14 @@ const Form = () => {
     { code: 'GBP', name: 'Libra Esterlina' }
   ]
 
-  //using our custom hook
+  //using our customs hook
   const [coin, SelectCoins, updateCoin] = useCoin('', COINS)
+  const [crypto, SelectCrypto, updateCrypto] = useCrypto('')
 
   return (
     <form>
       <SelectCoins />
+      <SelectCrypto />
       <Button 
         type='submit'
         value='Calculate'></Button>

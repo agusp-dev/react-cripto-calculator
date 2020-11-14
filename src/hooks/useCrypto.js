@@ -22,34 +22,29 @@ const Select = styled.select`
   font-size: 1.2rem;
 `
 
-const useCoin = (initState, coins) => {
+const useCrypto = initState => {
   
   //State of our hook
   const [state, updateState] = useState(initState)
 
-  const getCoinsOptions = () => {
-    return coins.map( c => <option key={ c.code } value={ c.code }>{ c.name }</option> )
-  }
-
-  const selection = () => (
+  const selectCrypto = () => (
     <Fragment>
-      <Label>Select your coin</Label>
+      <Label>Select your crypto currency</Label>
       <Select
         onChange={ e => updateState(e.target.value) }
         value={ state }>
         <option value=''>-- Select --</option>
-        { getCoinsOptions() }
+        {/* { getCoinsOptions() } */}
       </Select>
     </Fragment>
   )
 
   //State return
-  return [state, selection, updateState]
+  return [state, selectCrypto, updateState]
 }
 
-useCoin.propTypes = {
-  initState: PropTypes.string.isRequired,
-  coins: PropTypes.array.isRequired
+useCrypto.propTypes = {
+  initState: PropTypes.string.isRequired
 }
 
-export { useCoin }
+export { useCrypto }
