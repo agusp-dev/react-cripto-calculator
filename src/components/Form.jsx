@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useCoin, useCrypto } from '../hooks'
+import { getCryptoCoins } from '../api'
 
 const Button = styled.input`
   margin-top: 20px;
@@ -27,9 +28,29 @@ const Form = () => {
     { code: 'GBP', name: 'Libra Esterlina' }
   ]
 
+  const [cryptoList, setCryptoList] = useState([])
+ 
   //using our customs hook
   const [coin, SelectCoins, updateCoin] = useCoin('', COINS)
-  const [crypto, SelectCrypto, updateCrypto] = useCrypto('')
+  const [crypto, SelectCrypto, updateCrypto] = useCrypto('', cryptoList)
+
+  useEffect(() => {
+    const getApiData = async () => {
+      const data = await getCryptoCoins('USD')
+      processApiData(data)
+    }
+    getApiData()
+  }, [])
+
+  const processApiData = apiData => {
+    if (apiData.status === 200) {
+      const { Message, Data } = apiData.data
+      if (Message != 'Success') return alert(`Error: ${Message}`)
+      setCryptoList( Data )
+    } else {
+      alert(`Error: ${apiData.statusText}`)
+    }
+  }
 
   return (
     <form>

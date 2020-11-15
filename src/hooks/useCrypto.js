@@ -22,7 +22,7 @@ const Select = styled.select`
   font-size: 1.2rem;
 `
 
-const useCrypto = initState => {
+const useCrypto = ( initState, cryptoList ) => {
   
   //State of our hook
   const [state, updateState] = useState(initState)
@@ -34,6 +34,9 @@ const useCrypto = initState => {
         onChange={ e => updateState(e.target.value) }
         value={ state }>
         <option value=''>-- Select --</option>
+        { cryptoList.map(c => (
+            <option value={ c.CoinInfo.FullName }>{ c.CoinInfo.FullName }</option>
+        ))}
         {/* { getCoinsOptions() } */}
       </Select>
     </Fragment>
@@ -44,7 +47,8 @@ const useCrypto = initState => {
 }
 
 useCrypto.propTypes = {
-  initState: PropTypes.string.isRequired
+  initState: PropTypes.string.isRequired,
+  cryptoList: PropTypes.array.isRequired
 }
 
 export { useCrypto }
