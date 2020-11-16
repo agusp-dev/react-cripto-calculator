@@ -34,10 +34,13 @@ const useCrypto = ( initState, cryptoList ) => {
         onChange={ e => updateState(e.target.value) }
         value={ state }>
         <option value=''>-- Select --</option>
-        { cryptoList.map(c => (
-            <option value={ c.CoinInfo.FullName }>{ c.CoinInfo.FullName }</option>
+        {cryptoList.map(c => (
+          <option
+            key={ c.CoinInfo.Id }
+            value={ c.CoinInfo.FullName }
+            >{ c.CoinInfo.FullName }
+          </option>
         ))}
-        {/* { getCoinsOptions() } */}
       </Select>
     </Fragment>
   )

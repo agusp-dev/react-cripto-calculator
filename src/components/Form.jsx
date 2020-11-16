@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { useCoin, useCrypto } from '../hooks'
 import { getCryptoCoins } from '../api'
+import { Error } from '.'
 
 const Button = styled.input`
   margin-top: 20px;
@@ -29,6 +30,7 @@ const Form = () => {
   ]
 
   const [cryptoList, setCryptoList] = useState([])
+  const [error, showError] = useState('')
  
   //using our customs hook
   const [coin, SelectCoins, updateCoin] = useCoin('', COINS)
@@ -36,7 +38,7 @@ const Form = () => {
 
   useEffect(() => {
     const getApiData = async () => {
-      const data = await getCryptoCoins('USD')
+      const data = await getCryptoCoins('')
       processApiData(data)
     }
     getApiData()
@@ -52,8 +54,22 @@ const Form = () => {
     }
   }
 
+  const onHandleSubmit = e =>  {
+    e.preventDefault()
+
+    if (coin.length === 0 || crypto.length === 0) return showError('Please, select coin and crypto.')
+    
+    showError('')
+
+
+
+  }
+
   return (
-    <form>
+    <form onSubmit={ onHandleSubmit }>
+      {error && (
+        <Error message={ error }/>
+      )}
       <SelectCoins />
       <SelectCrypto />
       <Button 
