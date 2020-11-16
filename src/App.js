@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import cripto from './assets/crypto.png'
-import { Form } from './components'
+import { Form, Quote, Loading } from './components'
 import { getCryptoFullData } from './api'
 
 const Container = styled.div`
@@ -42,11 +42,12 @@ function App() {
   const [coin, selectCoin] = useState('')
   const [crypto, selectCrypto] = useState('')
   
-  const [quoteResult, setQuoteResult] = useState({})
+	const [quoteResult, setQuoteResult] = useState({})
+	const [loading, showLoading] = useState(false)
 
   useEffect(() => {
     
-    if(coin.length === 0 || crypto.length === 0) return
+    if(coin.length === 0 || crypto.length === 0) return setQuoteResult({})
     const getCryptoCoinsFullData = async () => {
       const data = await getCryptoFullData(coin, crypto)
       processApiData(data)
@@ -76,9 +77,13 @@ function App() {
         <Heading>Quote Crypto instantly</Heading>
         <Form 
           selectCoin={ selectCoin }
-          selectCrypto={ selectCrypto }/>
-        {quoteResult && (
-          <div>{ quoteResult.toString() }</div>
+          selectCrypto={ selectCrypto }
+					showLoading={ showLoading }/>
+				{loading && (
+					<Loading />
+				)}
+        {quoteResult && Object.keys(quoteResult).length > 0 && (
+					<Quote quoteResult={ quoteResult }/>
         )}
       </div>
     </Container>

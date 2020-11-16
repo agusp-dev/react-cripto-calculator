@@ -21,7 +21,7 @@ const Button = styled.input`
   }
 `
 
-const Form = ({ selectCoin, selectCrypto }) => {
+const Form = ({ selectCoin, selectCrypto, showLoading }) => {
 
   const COINS = [
     { code: 'USD', name: 'Dolar de Estados Unidos' },
@@ -56,12 +56,21 @@ const Form = ({ selectCoin, selectCrypto }) => {
   }
 
   const onHandleSubmit = e =>  {
-    e.preventDefault()
-    if (coin.length === 0 || crypto.length === 0) 
-      return showError('Please, select coin and crypto.')
-    showError('')
-    selectCoin(coin)
-    selectCrypto(crypto)
+		e.preventDefault()
+		showLoading(true)
+		selectCoin('')
+		selectCrypto('')
+		
+		setTimeout(() => {
+			if (coin.length === 0 || crypto.length === 0) {
+				showLoading(false)
+				return showError('Please, select coin and crypto.')
+			}
+			showError('')
+			selectCoin(coin)
+			selectCrypto(crypto)
+			showLoading(false)
+		}, 2000)
   }
 
   return (
@@ -80,7 +89,8 @@ const Form = ({ selectCoin, selectCrypto }) => {
 
 Form.propTypes = {
   selectCoin: PropTypes.func.isRequired,
-  selectCrypto: PropTypes.func.isRequired
+	selectCrypto: PropTypes.func.isRequired,
+	showLoading: PropTypes.func.isRequired
 }
 
 export { Form }
