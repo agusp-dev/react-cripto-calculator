@@ -37,7 +37,7 @@ const useCrypto = ( initState, cryptoList ) => {
         {cryptoList.map(c => (
           <option
             key={ c.CoinInfo.Id }
-            value={ c.CoinInfo.FullName }
+            value={ c.CoinInfo.Name }
             >{ c.CoinInfo.FullName }
           </option>
         ))}

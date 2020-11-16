@@ -1,6 +1,8 @@
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import cripto from './assets/crypto.png'
 import { Form } from './components'
+import { getCryptoFullData } from './api'
 
 const Container = styled.div`
   max-width: 900px;
@@ -36,6 +38,35 @@ const Heading = styled.h1`
 `
 
 function App() {
+
+  const [coin, selectCoin] = useState('')
+  const [crypto, selectCrypto] = useState('')
+  
+  const [quoteResult, setQuoteResult] = useState({})
+
+  useEffect(() => {
+    
+    if(coin.length === 0 || crypto.length === 0) return
+    const getCryptoCoinsFullData = async () => {
+      const data = await getCryptoFullData(coin, crypto)
+      processApiData(data)
+    }
+    getCryptoCoinsFullData()
+
+  }, [coin, crypto])
+
+  const processApiData = apiData => {
+    if (apiData.status === 200) {
+      const { Response, Message } = apiData.data
+      if (Response === 'Error') return alert(`Error: ${Message}`)
+      const { DISPLAY } = apiData.data
+      setQuoteResult(DISPLAY[crypto][coin])
+    } else {
+      setQuoteResult({})
+      alert(`Error: ${apiData.statusText}`)
+    }
+  }
+
   return (
     <Container>
       <div>
@@ -43,7 +74,12 @@ function App() {
       </div>
       <div>
         <Heading>Quote Crypto instantly</Heading>
-        <Form />
+        <Form 
+          selectCoin={ selectCoin }
+          selectCrypto={ selectCrypto }/>
+        {quoteResult && (
+          <div>{ quoteResult.toString() }</div>
+        )}
       </div>
     </Container>
   );
